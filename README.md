@@ -98,7 +98,7 @@ Adaptadores de red de la máquina virtual del servidor (NAT para internet y VMne
 
 Conectividad del servidor hacia el router y el switch:
 
-![Pruebas de ping](image/03-ping-conectividad.png)
+![Pruebas de ping](image/03.png)
 
 * * *
 
