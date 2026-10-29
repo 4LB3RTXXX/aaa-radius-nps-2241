@@ -94,7 +94,7 @@ Una sola red de administración con tres equipos, así que un prefijo /24 es suf
 
 Adaptadores de red de la máquina virtual del servidor (NAT para internet y VMnet2 para la topología):
 
-![Adaptadores de red en VMware](image/02-adaptadores-vmware.png)
+![Adaptadores de red en VMware](image/02.png)
 
 Conectividad del servidor hacia el router y el switch:
 
