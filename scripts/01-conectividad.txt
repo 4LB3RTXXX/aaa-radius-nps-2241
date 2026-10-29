@@ -1,0 +1,56 @@
+# NOTA: los valores entre < > son las contraseñas y el secreto del laboratorio; no se publican en este repositorio.
+# ==========================================================
+# 01 - Conectividad base, red 10.22.41.0/24
+# ==========================================================
+
+# ---------- En PowerShell (administrador) de NPS-2241 ----------
+Get-NetAdapter
+New-NetIPAddress -InterfaceAlias "Ethernet1" -IPAddress 10.22.41.10 -PrefixLength 24
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet1" -ServerAddresses 127.0.0.1
+New-NetFirewallRule -DisplayName "Permitir ICMP-In" -Protocol ICMPv4 -IcmpType 8 -Direction Inbound -Action Allow
+Get-NetIPAddress -InterfaceAlias "Ethernet1" -AddressFamily IPv4
+
+# ---------- En la consola de R1-2241 (GNS3) ----------
+enable
+configure terminal
+hostname R1-2241
+no ip domain-lookup
+interface FastEthernet0/0
+ description LAN-SW1-NPS
+ ip address 10.22.41.1 255.255.255.0
+ no shutdown
+exit
+end
+write memory
+
+# ---------- En la consola de SW1-2241 (GNS3) ----------
+enable
+configure terminal
+hostname SW1-2241
+no ip domain-lookup
+interface GigabitEthernet0/0
+ description UPLINK-R1
+ no shutdown
+exit
+interface GigabitEthernet0/1
+ description SERVIDOR-NPS
+ no shutdown
+exit
+interface vlan 1
+ ip address 10.22.41.2 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 10.22.41.1
+end
+write memory
+
+# ---------- Pruebas ----------
+# En R1-2241:
+ping 10.22.41.2
+ping 10.22.41.10
+# En SW1-2241:
+ping 10.22.41.1
+ping 10.22.41.10
+# En PowerShell de NPS-2241:
+ping 10.22.41.1
+ping 10.22.41.2
