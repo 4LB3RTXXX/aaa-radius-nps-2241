@@ -482,8 +482,8 @@ image/
 
 running-configs/
 ├── R1-2241-running-config.txt
-├── SW1-2241-running-config.txt
-└── NPS-2241-config.xml
+└── SW1-2241-running-config.txt
+
 
 scripts/
 ├── 01-conectividad.txt
