@@ -14,7 +14,7 @@
 
 ## 📺 Video de Demostración
 
-> [**Ver demostración en YouTube →**](PEGAR_ENLACE_YOUTUBE_AQUI)
+> [**Ver demostración en YouTube →**](https://www.youtube.com/watch?v=xtY3BGyHeQI)
 
 * * *
 
@@ -94,11 +94,11 @@ Una sola red de administración con tres equipos, así que un prefijo /24 es suf
 
 Adaptadores de red de la máquina virtual del servidor (NAT para internet y VMnet2 para la topología):
 
-![Adaptadores de red en VMware](image/02.png)
+![Adaptadores de red en VMware](image/02-adaptadores-vmware.png)
 
 Conectividad del servidor hacia el router y el switch:
 
-![Pruebas de ping](image/03.png)
+![Pruebas de ping](image/03-ping-conectividad.png)
 
 * * *
 
@@ -126,7 +126,7 @@ Conectividad del servidor hacia el router y el switch:
 
 ### Topología
 
-![Topología](image/01.png)
+![Topología](image/01-topologia.png)
 
 ### Diagrama lógico
 
@@ -175,53 +175,53 @@ flowchart TB
 
 Dominio `aaa2241.local`:
 
-![Dominio de Active Directory](image/04.png)
+![Dominio de Active Directory](image/04-dominio-ad.png)
 
 Grupos de nivel 0, 5 y 10 con sus miembros:
 
-![Grupos y miembros](image/05.png)
+![Grupos y miembros](image/05-grupos-miembros.png)
 
 Unidad organizativa `AAA-2241` con los grupos y los usuarios:
 
-![Unidad organizativa AAA-2241](image/06.png)
+![Unidad organizativa AAA-2241](image/06-ou-aaa-2241.png)
 
 ### NPS (servidor RADIUS)
 
 Clientes RADIUS (el router y el switch):
 
-![Clientes RADIUS](image/07.png)
+![Clientes RADIUS](image/07-clientes-radius.png)
 
 Directivas de red en orden. Las dos directivas por defecto están deshabilitadas:
 
-![Directivas de red en orden](image/08.png)
+![Directivas de red en orden](image/08-directivas-nps.png)
 
 **Nivel 0** — `Nivel0-Cisco`, atributo `shell:priv-lvl=0`:
 
-![Nivel 0, condiciones](image/09.png)
+![Nivel 0, condiciones](image/09-nivel0-condiciones.png)
 
-![Nivel 0, configuración](image/10.png)
+![Nivel 0, configuración](image/10-nivel0-configuracion.png)
 
 **Nivel 5** — `Nivel5-Cisco`, atributo `shell:priv-lvl=5`:
 
-![Nivel 5, condiciones](image/11.png)
+![Nivel 5, condiciones](image/11-nivel5-condiciones.png)
 
-![Nivel 5, configuración](image/12.png)
+![Nivel 5, configuración](image/12-nivel5-configuracion.png)
 
 **Nivel 10** — `Nivel10-Cisco`, atributo `shell:priv-lvl=10`:
 
-![Nivel 10, condiciones](image/13.png)
+![Nivel 10, condiciones](image/13-nivel10-condiciones.png)
 
-![Nivel 10, configuración](image/14.png)
+![Nivel 10, configuración](image/14-nivel10-configuracion.png)
 
 ### Router y switch
 
 Configuración de AAA y SSH verificada en `R1-2241`:
 
-![R1, configuración de AAA y SSH](image/15.png)
+![R1, configuración de AAA y SSH](image/15-r1-config-aaa-ssh.png)
 
 Configuración de AAA y SSH verificada en `SW1-2241`:
 
-![SW1, configuración de AAA y SSH](image/22.png)
+![SW1, configuración de AAA y SSH](image/22-sw1-config-aaa-ssh.png)
 
 * * *
 
@@ -262,7 +262,7 @@ Configuración de AAA y SSH verificada en `SW1-2241`:
 
 **Notas:**
 
-- **SSH y cifrados:** la imagen de IOS usada (15.2) solo ofrece cifrados CBC en SSH, que el cliente SSH de Windows tiene desactivados por defecto. Se agregó una configuración de cliente (`~/.ssh/config`) para estos equipos. Está en [`06-pruebas-y-ssh.ps1`](scripts/06.ps1).
+- **SSH y cifrados:** la imagen de IOS usada (15.2) solo ofrece cifrados CBC en SSH, que el cliente SSH de Windows tiene desactivados por defecto. Se agregó una configuración de cliente (`~/.ssh/config`) para estos equipos. Está en [`06-pruebas-y-ssh.ps1`](scripts/06-pruebas-y-ssh.ps1).
 - **Auxiliar:** la configuración de `line aux 0` se aplicó en los equipos cuya imagen incluye puerto auxiliar (ver las running-configs).
 - **Visibilidad de la configuración:** en niveles menores a 15, `show running-config` muestra solo las partes de la configuración que ese nivel puede ver.
 - **Mejora futura:** el comando `enable` con la contraseña de `enable secret` permite subir a nivel 15 desde cualquier usuario. Una mejora sería autenticar también `enable` contra el servidor de autenticación.
@@ -275,59 +275,59 @@ Configuración de AAA y SSH verificada en `SW1-2241`:
 
 **Prueba 1 — Nivel 0:** el usuario `user-nivel0` entra por la consola y solo dispone de los comandos básicos.
 
-![R1, nivel 0](image/16.png)
+![R1, nivel 0](image/16-r1-nivel0.png)
 
 **Prueba 2 — Nivel 5:** `user-nivel5` tiene privilegio 5, consulta las interfaces, pero `show running-config` es rechazado.
 
-![R1, nivel 5](image/17.png)
+![R1, nivel 5](image/17-r1-nivel5.png)
 
 **Prueba 3 — Nivel 10:** `user-nivel10` tiene privilegio 10 y ve la configuración, pero `configure terminal` es rechazado.
 
-![R1, nivel 10](image/18.png)
+![R1, nivel 10](image/18-r1-nivel10.png)
 
 **Prueba 4 — Login fallido:** con una contraseña incorrecta, RADIUS rechaza el acceso y el router no abre la sesión.
 
-![R1, login fallido](image/19.png)
+![R1, login fallido](image/19-r1-login-fallido.png)
 
 **Prueba 5 — SSH con el usuario local:** `admin-local` entra por SSH con privilegio 15.
 
-![R1, SSH con el usuario local](image/20.png)
+![R1, SSH con el usuario local](image/20-r1-ssh-local.png)
 
 **Prueba 6 — Estado de RADIUS y logs:** `show aaa servers` muestra los contadores de autenticación y contabilidad, y `show logging` muestra los accesos correctos, el intento fallido y los cambios de privilegio.
 
-![R1, RADIUS y logs](image/21.png)
+![R1, RADIUS y logs](image/21-r1-radius-logs.png)
 
 ### Switch `SW1-2241`
 
 **Prueba 7 — Nivel 0:**
 
-![SW1, nivel 0](image/23.png)
+![SW1, nivel 0](image/23-sw1-nivel0.png)
 
 **Prueba 8 — Nivel 5:**
 
-![SW1, nivel 5](image/24.png)
+![SW1, nivel 5](image/24-sw1-nivel5.png)
 
 **Prueba 9 — Nivel 10:**
 
-![SW1, nivel 10](image/25.png)
+![SW1, nivel 10](image/25-sw1-nivel10.png)
 
 **Prueba 10 — Login fallido:**
 
-![SW1, login fallido](image/26.png)
+![SW1, login fallido](image/26-sw1-login-fallido.png)
 
 **Prueba 11 — SSH con el usuario local:**
 
-![SW1, SSH con el usuario local](image/27.png)
+![SW1, SSH con el usuario local](image/27-sw1-ssh-local.png)
 
 **Prueba 12 — Estado de RADIUS y logs:**
 
-![SW1, RADIUS y logs](image/28.png)
+![SW1, RADIUS y logs](image/28-sw1-radius-logs.png)
 
 ### Servidor NPS
 
 **Prueba 13 — Registro en el servidor:** los eventos 6272 son accesos concedidos y los 6273 son accesos denegados, incluidos los intentos con contraseña incorrecta.
 
-![Eventos de NPS](image/29.png)
+![Eventos de NPS](image/29-eventos-nps.png)
 
 * * *
 
