@@ -1,0 +1,140 @@
+Building configuration...
+
+Current configuration : 2195 bytes
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1-2241
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging userinfo
+logging buffered 64000 informational
+enable secret 5 $1$T1j3$5xs/3uB1fFQNr399D1sgC/
+!
+aaa new-model
+!
+!
+aaa group server radius GRP-NPS
+ server name NPS-2241
+!
+aaa authentication login default local
+aaa authentication login CON-AUX-AUTH group GRP-NPS local
+aaa authorization console
+aaa authorization exec default local 
+aaa authorization exec CON-AUX-AUTHZ group GRP-NPS local 
+aaa accounting exec CON-AUX-ACCT start-stop group GRP-NPS
+aaa accounting system default start-stop group GRP-NPS
+!
+!
+!
+!
+!
+aaa session-id common
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name aaa2241.local
+ip cef
+login on-failure log
+login on-success log
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+username admin-local privilege 15 secret 5 $1$e.TE$zVmJrwjVF6SgjRvF2QtIi.
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+ip ssh time-out 60
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description LAN-SW1-NPS
+ ip address 10.22.41.1 255.255.255.0
+ duplex full
+!
+interface FastEthernet1/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet1/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+radius server NPS-2241
+ address ipv4 10.22.41.10 auth-port 1812 acct-port 1813
+ key 7 <OCULTO>
+!
+!
+control-plane
+!
+privilege exec level 5 ping
+privilege exec level 5 show ip interface brief
+privilege exec level 5 show ip interface
+privilege exec level 5 show ip
+privilege exec level 10 show running-config
+privilege exec level 10 show logging
+privilege exec level 5 show
+!
+line con 0
+ privilege level 15
+ authorization exec CON-AUX-AUTHZ
+ accounting exec CON-AUX-ACCT
+ logging synchronous
+ login authentication CON-AUX-AUTH
+ stopbits 1
+line aux 0
+ privilege level 15
+ authorization exec CON-AUX-AUTHZ
+ accounting exec CON-AUX-ACCT
+ logging synchronous
+ login authentication CON-AUX-AUTH
+ stopbits 1
+line vty 0 4
+ length 0
+ transport input ssh
+!
+!
+end
